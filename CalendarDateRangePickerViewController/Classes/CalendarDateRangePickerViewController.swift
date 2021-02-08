@@ -82,6 +82,10 @@ extension CalendarDateRangePickerViewController {
     }
     
     override public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        
+        let difference = Calendar.current.dateComponents([.month], from: minimumDate, to: maximumDate)
+        var section = difference.month! - section
+        
         let firstDateForSection = getFirstDateForSection(section: section)
         let weekdayRowItems = 7
         let blankItems = getWeekday(date: firstDateForSection) - 1
@@ -90,17 +94,21 @@ extension CalendarDateRangePickerViewController {
     }
     
     override public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        let difference = Calendar.current.dateComponents([.month], from: minimumDate, to: maximumDate)
+        var section = difference.month! - indexPath.section
+        
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellReuseIdentifier, for: indexPath) as! CalendarDateRangePickerCell
         cell.selectedColor = self.selectedColor
         cell.reset()
-        let blankItems = getWeekday(date: getFirstDateForSection(section: indexPath.section)) - 1
+        let blankItems = getWeekday(date: getFirstDateForSection(section: section)) - 1
         if indexPath.item < 7 {
             cell.label.text = getWeekdayLabel(weekday: indexPath.item + 1)
         } else if indexPath.item < 7 + blankItems {
             cell.label.text = ""
         } else {
             let dayOfMonth = indexPath.item - (7 + blankItems) + 1
-            let date = getDate(dayOfMonth: dayOfMonth, section: indexPath.section)
+            let date = getDate(dayOfMonth: dayOfMonth, section: section)
             cell.date = date
             cell.label.text = "\(dayOfMonth)"
             
@@ -134,8 +142,10 @@ extension CalendarDateRangePickerViewController {
     override public func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         switch kind {
         case UICollectionView.elementKindSectionHeader:
+            let difference = Calendar.current.dateComponents([.month], from: minimumDate, to: maximumDate)
+            var section = difference.month! - indexPath.section
             let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerReuseIdentifier, for: indexPath) as! CalendarDateRangePickerHeaderView
-            headerView.label.text = getMonthLabel(date: getFirstDateForSection(section: indexPath.section))
+            headerView.label.text = getMonthLabel(date: getFirstDateForSection(section: section))
             return headerView
         default:
             fatalError("Unexpected element kind")
