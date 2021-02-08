@@ -44,6 +44,7 @@ public class CalendarDateRangePickerViewController: UICollectionViewController {
 
         collectionView?.register(CalendarDateRangePickerCell.self, forCellWithReuseIdentifier: cellReuseIdentifier)
         collectionView?.register(CalendarDateRangePickerHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerReuseIdentifier)        
+        
         collectionView?.contentInset = collectionViewInsets
         
         if minimumDate == nil {
